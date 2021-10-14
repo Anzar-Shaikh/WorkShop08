@@ -81,7 +81,6 @@ public class HomeController {
         @DeleteMapping("/deleteContact/{id}")
         public void deleteContact(@PathVariable("id") int id){
             addressBookService.deletePerson(id);
-
         }
 
 }
