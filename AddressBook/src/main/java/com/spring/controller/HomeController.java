@@ -4,6 +4,8 @@ import com.spring.DTO.AddressBookDTO;
 import com.spring.entities.AddressBook;
 import com.spring.service.AddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +30,10 @@ public class HomeController {
          * @return all contacts in the repository
          */
         @GetMapping("/getAllContacts")
-        public List<AddressBook> getAllContacts(){
-            return addressBookService.getAllContacts();
+        public ResponseEntity<List<AddressBook>> getAllContacts(){
+                List<AddressBook> list = null;
+                list = addressBookService.getAllContacts();
+                return  new ResponseEntity<>(list, HttpStatus.OK);
         }
 
         /**
@@ -38,9 +42,10 @@ public class HomeController {
          * @return give contact person details using given id
          */
         @GetMapping("/getSinglePerson/{id}")
-        public AddressBook getSinglePersonById(@PathVariable("id") int id){
-
-            return addressBookService.getSinglePerson(id);
+        public ResponseEntity<AddressBook> getSinglePersonById(@PathVariable("id") int id){
+                AddressBook contact = null;
+                contact = addressBookService.getSinglePerson(id);
+                return new ResponseEntity<>(contact, HttpStatus.FOUND);
         }
 
         /**
@@ -49,8 +54,10 @@ public class HomeController {
          * @return saved contact in repo provided by user
          */
         @PostMapping("/saveContact")
-        public AddressBook saveContact(@RequestBody AddressBookDTO addressBookDTO){
-            return addressBookService.savePerson(addressBookDTO);
+        public ResponseEntity<AddressBook> saveContact(@RequestBody AddressBookDTO addressBookDTO){
+                AddressBook savedContact = null;
+                savedContact = addressBookService.savePerson(addressBookDTO);
+                return  new ResponseEntity<>(savedContact, HttpStatus.ACCEPTED);
         }
 
         /**
@@ -61,8 +68,10 @@ public class HomeController {
          */
 
         @PutMapping("/editContact/{id}")
-        public AddressBook editContact(@RequestBody AddressBookDTO addressBookDTO , @PathVariable("id") int id){
-            return addressBookService.editPerson(addressBookDTO,id);
+        public ResponseEntity<AddressBook> editContact(@RequestBody AddressBookDTO addressBookDTO , @PathVariable("id") int id){
+                AddressBook updatedContact = null;
+                updatedContact = addressBookService.editPerson(addressBookDTO , id);
+                return  new ResponseEntity<>(updatedContact , HttpStatus.OK);
         }
 
         /**
@@ -72,6 +81,7 @@ public class HomeController {
         @DeleteMapping("/deleteContact/{id}")
         public void deleteContact(@PathVariable("id") int id){
             addressBookService.deletePerson(id);
+
         }
 
 }
