@@ -1,6 +1,7 @@
 package com.spring.controller;
 
 import com.spring.DTO.AddressBookDTO;
+import com.spring.DTO.ResponseDTO;
 import com.spring.entities.AddressBook;
 import com.spring.service.AddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,11 @@ public class HomeController {
          * @return all contacts in the repository
          */
         @GetMapping("/getAllContacts")
-        public ResponseEntity<List<AddressBook>> getAllContacts(){
-                List<AddressBook> list = null;
-                list = addressBookService.getAllContacts();
-                return  new ResponseEntity<>(list, HttpStatus.OK);
+        public ResponseEntity<ResponseDTO> getAllContacts(){
+                List<AddressBook> employeeList = null;
+                employeeList = addressBookService.getAllContacts();
+                ResponseDTO responseDTO = new ResponseDTO("Get mapping succeeded" , employeeList);
+                return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
         }
 
         /**
@@ -42,10 +44,11 @@ public class HomeController {
          * @return give contact person details using given id
          */
         @GetMapping("/getSinglePerson/{id}")
-        public ResponseEntity<AddressBook> getSinglePersonById(@PathVariable("id") int id){
+        public ResponseEntity<ResponseDTO> getSinglePersonById(@PathVariable("id") int id){
                 AddressBook contact = null;
                 contact = addressBookService.getSinglePerson(id);
-                return new ResponseEntity<>(contact, HttpStatus.FOUND);
+                ResponseDTO responseDTO = new ResponseDTO("Get mapping succeeded", contact);
+                return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.FOUND);
         }
 
         /**
@@ -54,10 +57,12 @@ public class HomeController {
          * @return saved contact in repo provided by user
          */
         @PostMapping("/saveContact")
-        public ResponseEntity<AddressBook> saveContact(@RequestBody AddressBookDTO addressBookDTO){
+        public ResponseEntity<ResponseDTO> saveContact(@RequestBody AddressBookDTO addressBookDTO){
                 AddressBook savedContact = null;
                 savedContact = addressBookService.savePerson(addressBookDTO);
-                return  new ResponseEntity<>(savedContact, HttpStatus.ACCEPTED);
+                ResponseDTO responseDTO = new ResponseDTO("Get mapping succeeded", savedContact);
+                return  new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
+
         }
 
         /**
@@ -68,10 +73,11 @@ public class HomeController {
          */
 
         @PutMapping("/editContact/{id}")
-        public ResponseEntity<AddressBook> editContact(@RequestBody AddressBookDTO addressBookDTO , @PathVariable("id") int id){
+        public ResponseEntity<ResponseDTO> editContact(@RequestBody AddressBookDTO addressBookDTO , @PathVariable("id") int id){
                 AddressBook updatedContact = null;
                 updatedContact = addressBookService.editPerson(addressBookDTO , id);
-                return  new ResponseEntity<>(updatedContact , HttpStatus.OK);
+                ResponseDTO responseDTO = new ResponseDTO("Put mapping succeeded", updatedContact);
+                return  new ResponseEntity<>(responseDTO , HttpStatus.OK);
         }
 
         /**
